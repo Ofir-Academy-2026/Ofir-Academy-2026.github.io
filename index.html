@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OFIR Academy — Treinamento Oficial de Vendas</title>
+<style>
+  :root {
+    --gold: #B8860B;
+    --gold-light: #D4A017;
+    --gold-pale: #F5EDD0;
+    --cream: #FAF6F0;
+    --cream-dark: #F0E8D8;
+    --brown: #6B4C11;
+    --text: #2C1A00;
+    --text-light: #6B5533;
+    --sidebar-w: 240px;
+    --green: #2D7D46;
+    --red: #C0392B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--cream); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w); min-width: var(--sidebar-w);
+    background: #fff; border-right: 1px solid #E8DCC8;
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 20px 16px 12px; border-bottom: 1px solid #E8DCC8; text-align: center;
+  }
+  .sidebar-logo .ofir-title { font-size: 20px; font-weight: bold; color: var(--gold); letter-spacing: 3px; }
+  .sidebar-logo .ofir-sub { font-size: 8px; letter-spacing: 2px; color: var(--text-light); text-transform: uppercase; }
+  .sidebar-logo .academy-badge {
+    display: inline-block; margin-top: 6px; padding: 2px 10px;
+    border: 1px solid var(--gold); border-radius: 20px;
+    font-size: 8px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase;
+  }
+  .progress-area { padding: 12px 16px; border-bottom: 1px solid #E8DCC8; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .progress-bar { background: #E8DCC8; border-radius: 4px; height: 6px; }
+  .progress-fill { background: var(--gold); border-radius: 4px; height: 6px; transition: width .4s; }
+  .nav-section-label {
+    padding: 10px 16px 4px; font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: #AAA; font-family: sans-serif;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; cursor: pointer; font-size: 12px; color: var(--text-light);
+    transition: background .15s; border-left: 3px solid transparent;
+    font-family: sans-serif;
+  }
+  .nav-item:hover { background: var(--cream); }
+  .nav-item.active { background: var(--gold-pale); border-left-color: var(--gold); color: var(--brown); font-weight: bold; }
+  .nav-item.done { color: var(--green); }
+  .nav-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; }
+  .nav-item.done .nav-dot { background: var(--green); border-color: var(--green); color: #fff; }
+  .nav-item.active .nav-dot { background: var(--gold); border-color: var(--gold); color: #fff; }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; }
+
+  /* ── PAGE ── */
+  .page { display: none; padding: 40px; max-width: 900px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  .hero { text-align: center; padding: 40px 20px 30px; }
+  .hero .brand { font-size: 52px; font-weight: bold; color: var(--gold); letter-spacing: 6px; }
+  .hero .brand-sub { font-size: 11px; letter-spacing: 4px; color: var(--text-light); text-transform: uppercase; margin-top: 4px; }
+  .hero h1 { font-size: 28px; margin: 24px 0 14px; color: var(--text); }
+  .hero p { font-size: 15px; color: var(--text-light); max-width: 560px; margin: 0 auto 28px; line-height: 1.7; }
+  .btn-primary {
+    display: inline-block; background: var(--gold); color: #fff;
+    padding: 14px 32px; border-radius: 6px; font-size: 15px;
+    cursor: pointer; border: none; font-family: sans-serif; font-weight: bold;
+    text-decoration: none; transition: background .2s;
+  }
+  .btn-primary:hover { background: var(--brown); }
+  .btn-secondary {
+    display: inline-block; background: transparent; color: var(--green);
+    padding: 12px 28px; border-radius: 6px; font-size: 14px;
+    cursor: pointer; border: 2px solid var(--green); font-family: sans-serif; font-weight: bold;
+    text-decoration: none; transition: all .2s; margin-top: 10px;
+  }
+  .btn-secondary:hover { background: var(--green); color: #fff; }
+
+  /* ── CARDS ── */
+  .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
+  .card { background: #fff; border: 1px solid #E8DCC8; border-radius: 10px; padding: 24px; }
+  .card h3 { color: var(--gold); font-size: 16px; margin-bottom: 10px; }
+  .card p { font-size: 13px; color: var(--text-light); line-height: 1.7; }
+  .card-full { background: #fff; border: 1px solid #E8DCC8; border-radius: 10px; padding: 24px; margin: 20px 0; }
+  .card-full h3 { color: var(--gold); font-size: 18px; margin-bottom: 14px; }
+
+  /* ── VALUES GRID ── */
+  .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0; }
+  .value-card { background: #fff; border: 1px solid #E8DCC8; border-radius: 8px; padding: 18px 14px; text-align: center; }
+  .value-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .value-card h4 { color: var(--gold); font-size: 13px; margin-bottom: 6px; }
+  .value-card p { font-size: 11px; color: var(--text-light); line-height: 1.5; }
+
+  /* ── HOW IT WORKS ── */
+  .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0; }
+  .step-card { background: #fff; border: 1px solid #E8DCC8; border-radius: 8px; padding: 18px 12px; text-align: center; }
+  .step-num { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--gold); color: var(--gold); font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-family: sans-serif; }
+  .step-card h4 { font-size: 12px; color: var(--text); margin-bottom: 6px; }
+  .step-card p { font-size: 11px; color: var(--text-light); line-height: 1.5; }
+
+  /* ── STATS ── */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0; }
+  .stat-card { background: var(--gold-pale); border: 1px solid #E0CC90; border-radius: 8px; padding: 18px; text-align: center; }
+  .stat-num { font-size: 26px; font-weight: bold; color: var(--gold); font-family: sans-serif; }
+  .stat-label { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+  /* ── MODULE CONTENT ── */
+  .module-header { border-bottom: 2px solid var(--gold-pale); padding-bottom: 20px; margin-bottom: 28px; }
+  .module-header .module-num { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-family: sans-serif; }
+  .module-header h1 { font-size: 28px; color: var(--text); margin: 8px 0; }
+  .module-header .module-desc { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+
+  h2.section-title { font-size: 18px; color: var(--gold); margin: 28px 0 14px; border-left: 3px solid var(--gold); padding-left: 12px; }
+  h3.sub-title { font-size: 15px; color: var(--brown); margin: 20px 0 10px; }
+
+  p.body-text { font-size: 14px; color: var(--text-light); line-height: 1.8; margin-bottom: 14px; }
+  p.body-text strong { color: var(--text); }
+
+  /* ── HIGHLIGHT BOXES ── */
+  .highlight-gold { background: var(--gold-pale); border-left: 4px solid var(--gold); border-radius: 0 6px 6px 0; padding: 16px 18px; margin: 16px 0; }
+  .highlight-gold p { font-size: 13px; color: var(--brown); line-height: 1.7; }
+  .highlight-green { background: #EAF5EE; border-left: 4px solid var(--green); border-radius: 0 6px 6px 0; padding: 16px 18px; margin: 16px 0; }
+  .highlight-green p { font-size: 13px; color: #1A5C30; line-height: 1.7; }
+  .highlight-red { background: #FDECEA; border-left: 4px solid var(--red); border-radius: 0 6px 6px 0; padding: 16px 18px; margin: 16px 0; }
+  .highlight-red p { font-size: 13px; color: #7B2020; line-height: 1.7; }
+  .highlight-blue { background: #EAF0FA; border-left: 4px solid #2563EB; border-radius: 0 6px 6px 0; padding: 16px 18px; margin: 16px 0; }
+  .highlight-blue p { font-size: 13px; color: #1A3A7A; line-height: 1.7; }
+
+  /* ── LISTS ── */
+  .custom-list { list-style: none; margin: 10px 0 16px 0; }
+  .custom-list li { font-size: 13px; color: var(--text-light); line-height: 1.7; padding: 4px 0 4px 22px; position: relative; }
+  .custom-list li::before { content: '›'; position: absolute; left: 6px; color: var(--gold); font-weight: bold; }
+  .custom-list li strong { color: var(--text); }
+
+  /* ── TWO-COL LISTS ── */
+  .two-col-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .col-box { background: #fff; border: 1px solid #E8DCC8; border-radius: 8px; padding: 16px; }
+  .col-box.green-box { border-color: #90CCA4; background: #EAF5EE; }
+  .col-box.red-box { border-color: #F0A0A0; background: #FDECEA; }
+  .col-box h4 { font-size: 12px; font-weight: bold; margin-bottom: 10px; font-family: sans-serif; }
+  .col-box.green-box h4 { color: var(--green); }
+  .col-box.red-box h4 { color: var(--red); }
+
+  /* ── TABLES ── */
+  .data-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; font-family: sans-serif; }
+  .data-table th { background: var(--gold); color: #fff; padding: 10px 14px; text-align: left; font-weight: bold; }
+  .data-table td { padding: 9px 14px; border-bottom: 1px solid #E8DCC8; color: var(--text-light); }
+  .data-table tr:nth-child(even) td { background: var(--cream); }
+  .data-table .ok { color: var(--green); font-weight: bold; }
+  .data-table .no { color: var(--red); font-weight: bold; }
+
+  /* ── SITUATION BOXES ── */
+  .situation { background: #fff; border: 1px solid #E8DCC8; border-radius: 8px; padding: 18px; margin: 14px 0; }
+  .situation .sit-title { font-size: 12px; font-weight: bold; color: var(--text); margin-bottom: 10px; font-family: sans-serif; }
+  .sit-row { display: flex; gap: 10px; margin: 6px 0; font-size: 13px; }
+  .sit-row .tag { font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; font-family: sans-serif; }
+  .tag-red { background: #FDECEA; color: var(--red); }
+  .tag-green { background: #EAF5EE; color: var(--green); }
+  .sit-row p { color: var(--text-light); line-height: 1.6; font-style: italic; }
+
+  /* ── SPIN CARDS ── */
+  .spin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 16px 0; }
+  .spin-card { background: #fff; border: 1px solid #E8DCC8; border-radius: 8px; padding: 16px; }
+  .spin-card .spin-letter { font-size: 22px; font-weight: bold; color: var(--gold); font-family: sans-serif; }
+  .spin-card h4 { font-size: 13px; color: var(--text); margin: 4px 0 8px; }
+  .spin-card ul { list-style: none; }
+  .spin-card ul li { font-size: 12px; color: var(--text-light); line-height: 1.6; padding: 2px 0 2px 14px; position: relative; }
+  .spin-card ul li::before { content: '›'; position: absolute; left: 2px; color: var(--gold); }
+
+  /* ── TRIGGER CARDS ── */
+  .trigger-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin: 16px 0; }
+  .trigger-card { background: #fff; border: 1px solid #E8DCC8; border-radius: 8px; padding: 18px; }
+  .trigger-card .t-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .trigger-card .t-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #fff; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; font-family: sans-serif; flex-shrink: 0; }
+  .trigger-card h4 { font-size: 14px; color: var(--text); }
+
+  /* ── FUNNEL TABLE ── */
+  .funnel-row { display: grid; grid-template-columns: 130px 1fr 120px; background: #fff; border: 1px solid #E8DCC8; border-radius: 6px; padding: 12px 16px; margin: 6px 0; align-items: center; gap: 14px; font-size: 13px; font-family: sans-serif; }
+  .funnel-row .f-stage { font-weight: bold; color: var(--gold); }
+  .funnel-row .f-action { color: var(--text-light); }
+  .funnel-row .f-meta { color: var(--text); text-align: right; font-size: 12px; }
+
+  /* ── PRODUCT TABLE ── */
+  .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0; }
+  .product-card { background: var(--gold-pale); border: 1px solid #E0CC90; border-radius: 8px; padding: 14px; }
+  .product-card h5 { color: var(--brown); font-size: 12px; margin-bottom: 6px; font-family: sans-serif; }
+  .product-card p { font-size: 11px; color: var(--text-light); line-height: 1.5; }
+
+  /* ── TEST SECTION ── */
+  .test-section {
+    background: var(--cream-dark); border: 1px solid #E0CC90; border-radius: 10px;
+    padding: 28px; margin: 36px 0 20px; text-align: center;
+  }
+  .test-section h2 { font-size: 20px; color: var(--text); margin-bottom: 8px; }
+  .test-section p { font-size: 13px; color: var(--text-light); margin-bottom: 20px; line-height: 1.6; }
+  .btn-test {
+    display: inline-block; background: var(--gold); color: #fff;
+    padding: 13px 28px; border-radius: 6px; font-size: 14px; font-weight: bold;
+    text-decoration: none; font-family: sans-serif; transition: background .2s; cursor: pointer; border: none;
+  }
+  .btn-test:hover { background: var(--brown); }
+  .btn-done {
+    display: block; margin: 12px auto 0; background: transparent; color: var(--green);
+    border: 2px solid var(--green); padding: 11px 24px; border-radius: 6px;
+    font-size: 13px; font-weight: bold; cursor: pointer; font-family: sans-serif;
+    text-decoration: none; transition: all .2s; max-width: 320px;
+  }
+  .btn-done:hover { background: var(--green); color: #fff; }
+
+  /* ── VERSE ── */
+  .verse { text-align: center; padding: 20px; color: var(--text-light); font-style: italic; font-size: 14px; border-top: 1px solid #E8DCC8; margin-top: 30px; }
+
+  /* ── FINAL MODULE ── */
+  .final-criteria { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .crit-card { background: #fff; border: 1px solid #E8DCC8; border-radius: 8px; padding: 18px; }
+  .crit-card h4 { font-size: 13px; color: var(--gold); margin-bottom: 8px; font-family: sans-serif; }
+  .crit-card p { font-size: 12px; color: var(--text-light); line-height: 1.6; }
+  .approval-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .appr-card { border-radius: 8px; padding: 18px; }
+  .appr-card.pass { background: #EAF5EE; border: 1px solid #90CCA4; }
+  .appr-card.fail { background: #FDECEA; border: 1px solid #F0A0A0; }
+  .appr-card h4 { font-size: 13px; font-family: sans-serif; margin-bottom: 6px; }
+  .appr-card.pass h4 { color: var(--green); }
+  .appr-card.fail h4 { color: var(--red); }
+  .appr-card p { font-size: 12px; color: var(--text-light); line-height: 1.6; }
+
+  /* ── CONGRATS PAGE ── */
+  #page-congrats { text-align: center; padding-top: 60px; }
+  #page-congrats .trophy { font-size: 64px; margin-bottom: 20px; }
+  #page-congrats h1 { font-size: 32px; color: var(--gold); margin-bottom: 14px; }
+  #page-congrats p { font-size: 15px; color: var(--text-light); max-width: 500px; margin: 0 auto 20px; line-height: 1.7; }
+
+  /* ── QUOTE BAR ── */
+  .quote-bar { background: var(--text); color: var(--gold-pale); padding: 20px 30px; text-align: center; font-style: italic; font-size: 13px; border-radius: 8px; margin: 24px 0; line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    #sidebar { width: 200px; min-width: 200px; }
+    #main { margin-left: 200px; }
+    .page { padding: 20px; }
+    .card-row, .values-grid, .steps-grid, .stats-row, .spin-grid, .final-criteria, .approval-row { grid-template-columns: 1fr; }
+    .product-grid { grid-template-columns: 1fr 1fr; }
+    .two-col-lists { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="ofir-title">OFIR</div>
+    <div class="ofir-sub">Soluções Financeiras</div>
+    <div class="academy-badge">Academy</div>
+  </div>
+  <div class="progress-area">
+    <div class="progress-label"><span>PROGRESSO</span><span id="pct">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+  </div>
+
+  <div class="nav-section-label">Início</div>
+  <div class="nav-item active" data-page="welcome" onclick="go(this)">
+    <div class="nav-dot">🏠</div> Boas-vindas à OFIR
+  </div>
+
+  <div class="nav-section-label">Fundamentos</div>
+  <div class="nav-item" data-page="m1" onclick="go(this)">
+    <div class="nav-dot">1</div> Módulo 1 — Universo do Consórcio
+  </div>
+  <div class="nav-item" data-page="m2" onclick="go(this)">
+    <div class="nav-dot">2</div> Módulo 2 — Mentalidade & Ética
+  </div>
+
+  <div class="nav-section-label">Vendas</div>
+  <div class="nav-item" data-page="m3" onclick="go(this)">
+    <div class="nav-dot">3</div> Módulo 3 — Técnicas de Vendas
+  </div>
+  <div class="nav-item" data-page="m4" onclick="go(this)">
+    <div class="nav-dot">4</div> Módulo 4 — Gatilhos Mentais
+  </div>
+  <div class="nav-item" data-page="m5" onclick="go(this)">
+    <div class="nav-dot">5</div> Módulo 5 — Prospecção Ativa & Passiva
+  </div>
+
+  <div class="nav-section-label">Administradoras</div>
+  <div class="nav-item" data-page="m6" onclick="go(this)">
+    <div class="nav-dot">6</div> Módulo 6 — Santander
+  </div>
+  <div class="nav-item" data-page="m7" onclick="go(this)">
+    <div class="nav-dot">7</div> Módulo 7 — Canopus
+  </div>
+  <div class="nav-item" data-page="m8" onclick="go(this)">
+    <div class="nav-dot">8</div> Módulo 8 — HS Consórcios
+  </div>
+  <div class="nav-item" data-page="m9" onclick="go(this)">
+    <div class="nav-dot">9</div> Módulo 9 — Yamaha
+  </div>
+  <div class="nav-item" data-page="m10" onclick="go(this)">
+    <div class="nav-dot">10</div> Módulo 10 — Roma
+  </div>
+  <div class="nav-item" data-page="m11" onclick="go(this)">
+    <div class="nav-dot">11</div> Módulo 11 — Embracon
+  </div>
+
+  <div class="nav-section-label">Excelência</div>
+  <div class="nav-item" data-page="m12" onclick="go(this)">
+    <div class="nav-dot">12</div> Módulo 12 — Pós-Contemplação
+  </div>
+  <div class="nav-item" data-page="m13" onclick="go(this)">
+    <div class="nav-dot">🏆</div> Desafio Final (TCC)
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════ -->
+<main id="main">
+
+<!-- ── WELCOME ── -->
+<div class="page active" id="page-welcome">
+  <div class="hero">
+    <div class="brand">OFIR</div>
+    <div class="brand-sub">Soluções Financeiras · Academy</div>
+    <h1>Bem-vindo ao Treinamento Oficial de Vendas</h1>
+    <p>Você está prestes a percorrer uma jornada que vai transformar a sua forma de vender. Este material foi construído do zero ao avançado — quem completar essa jornada sairá pronto para dar aula.</p>
+    <button class="btn-primary" onclick="go(document.querySelector('[data-page=m1]'))">Começar Jornada →</button>
+  </div>
+
+  <div class="card-row">
+    <div class="card">
+      <h3>Nossa Missão</h3>
+      <p>Conectar pessoas aos seus maiores sonhos através de soluções financeiras honestas, transparentes e baseadas em valores cristãos. Na OFIR, não vendemos produtos — construímos pontes entre o hoje e o futuro dos nossos clientes.</p>
+    </div>
+    <div class="card">
+      <h3>Nossa Visão</h3>
+      <p>Ser referência nacional em consultoria de consórcio, reconhecida pela excelência no atendimento, pela integridade de cada profissional e pelo impacto real na vida financeira de cada cliente atendido.</p>
+    </div>
+  </div>
+
+  <div class="card-full">
+    <h3>Nossos Valores</h3>
+    <div class="values-grid">
+      <div class="value-card"><div class="icon">✝️</div><h4>Fé</h4><p>Tudo o que fazemos é guiado pela fé e pelo temor a Deus</p></div>
+      <div class="value-card"><div class="icon">🤲</div><h4>Integridade</h4><p>Transparência absoluta em cada conversa e proposta</p></div>
+      <div class="value-card"><div class="icon">🎯</div><h4>Excelência</h4><p>Mediocridade não é opção — somos os melhores no que fazemos</p></div>
+      <div class="value-card"><div class="icon">❤️</div><h4>Propósito</h4><p>Vendemos sonhos, não produtos. O cliente primeiro, sempre</p></div>
+      <div class="value-card"><div class="icon">📈</div><h4>Crescimento</h4><p>Melhorar todos os dias — pessoal, profissional e espiritual</p></div>
+      <div class="value-card"><div class="icon">🤝</div><h4>Relacionamento</h4><p>Clientes são família. Construímos laços para a vida</p></div>
+    </div>
+  </div>
+
+  <div class="card-full">
+    <h3>Como Funciona Esta Jornada</h3>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">1</div><h4>Estude o Módulo</h4><p>Leia com atenção, use os materiais de apoio e absorva cada conteúdo.</p></div>
+      <div class="step-card"><div class="step-num">2</div><h4>Faça o Teste</h4><p>Ao finalizar, acesse o Google Forms correspondente. Mínimo 70% para avançar.</p></div>
+      <div class="step-card"><div class="step-num">3</div><h4>Avance ou Revise</h4><p>Se não atingir 70%, revise o módulo e refaça com acompanhamento de Jonathan.</p></div>
+      <div class="step-card"><div class="step-num">4</div><h4>Desafio Final</h4><p>Ao concluir todos os módulos, enfrente o TCC. Mínimo 80% para aprovação.</p></div>
+    </div>
+    <div class="highlight-gold"><p>⚡ <strong>Regra de ouro:</strong> Não avance sem dominar o módulo anterior. A aprovação no teste é obrigatória. Quem completar essa jornada sairá pronto para dar aula.</p></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">13</div><div class="stat-label">Módulos de treinamento</div></div>
+    <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Administradoras parceiras</div></div>
+    <div class="stat-card"><div class="stat-num">13</div><div class="stat-label">Testes de conhecimento</div></div>
+    <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Potencial de crescimento</div></div>
+  </div>
+
+  <div class="quote-bar">
+    "Tudo o que fizerem, façam de todo o coração, como para o Senhor, e não para os homens." — Colossenses 3:23
+  </div>
+</div>
+
+<!-- ── MÓDULO 1 ── -->
+<div class="page" id="page-m1">
+  <div class="module-header">
+    <div class="module-num">Fundamentos · Módulo 1</div>
+    <h1>O Universo do Consórcio</h1>
+    <p class="module-desc">Entenda o produto que você vai vender de cima a baixo — da origem legal aos argumentos de fechamento.</p>
+  </div>
+
+  <h2 class="section-title">O que é Consórcio?</h2>
+  <p class="body-text">Consórcio é uma modalidade de compra coletiva e planejada, regulamentada pelo Banco Central do Brasil (BACEN) pela <strong>Lei 11.795/2008</strong>. Um grupo de pessoas contribui mensalmente para um fundo comum. Esse fundo é usado para contemplar participantes com uma <strong>carta de crédito</strong> para adquirir o bem ou serviço desejado. <strong>Sem juros. Sem entrada obrigatória. Sem enriquecimento de banco.</strong></p>
+
+  <div class="highlight-gold">
+    <p>💬 <strong>Analogia para usar com clientes:</strong> <em>"Imagine você e mais 200 amigos juntando dinheiro todo mês. A cada assembleia, um de vocês recebe a soma total para comprar o que quer. Aqui tem uma empresa profissional gerenciando tudo, com regulamentação do Banco Central. Isso é consórcio."</em></p>
+  </div>
+
+  <h2 class="section-title">História</h2>
+  <ul class="custom-list">
+    <li>Surgiu no Brasil nos anos <strong>1960</strong>, criado por funcionários do Banco do Brasil</li>
+    <li>Em <strong>1991</strong>, o Banco Central passou a regular o setor</li>
+    <li>Em <strong>2008</strong>, a Lei 11.795 consolidou o arcabouço jurídico</li>
+    <li>Hoje o Brasil tem o <strong>maior mercado de consórcios do mundo</strong> — mais de 10 milhões de participantes ativos e R$ 600 bilhões em créditos administrados</li>
+  </ul>
+
+  <h2 class="section-title">Composição da Parcela</h2>
+  <table class="data-table">
+    <thead><tr><th>Componente</th><th>O que é</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Fundo Comum</strong></td><td>A maior parte — vai para o fundo do grupo. É o seu dinheiro sendo poupado</td></tr>
+      <tr><td><strong>Taxa de Administração</strong></td><td>Remuneração da administradora. <strong>Não é juro</strong></td></tr>
+      <tr><td><strong>Fundo de Reserva</strong></td><td>Cobre inadimplências, protege o grupo</td></tr>
+      <tr><td><strong>Seguro Prestamista</strong></td><td>Opcional. Cobre morte ou invalidez permanente</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">Tipos de Contemplação</h2>
+  <div class="card-row">
+    <div class="card"><h3>🎯 Sorteio</h3><p>Acontece mensalmente. Todos os adimplentes concorrem. Ideal para quem não tem pressa.</p></div>
+    <div class="card"><h3>💰 Lance Livre</h3><p>O consorciado oferece um % do crédito para antecipar a contemplação. Quem der o maior lance é contemplado. Ex: crédito R$100mil, lance 30% = usa R$70mil do crédito.</p></div>
+    <div class="card"><h3>🔄 Lance Embutido</h3><p>Usa parte do próprio crédito como lance — sem dinheiro extra. Ex: crédito R$100mil, lance embutido 20% = carta efetiva de R$80mil. Ótimo para quem não tem reservas.</p></div>
+    <div class="card"><h3>🏠 Lance com FGTS</h3><p>Exclusivo para imóvel. Usa o saldo do FGTS como lance para antecipar a contemplação.</p></div>
+  </div>
+
+  <h2 class="section-title">Consórcio vs. Financiamento</h2>
+  <table class="data-table">
+    <thead><tr><th>Critério</th><th>Consórcio</th><th>Financiamento</th></tr></thead>
+    <tbody>
+      <tr><td>Juros</td><td class="ok">✅ Nenhum</td><td class="no">❌ Até 24% ao ano</td></tr>
+      <tr><td>Entrada</td><td class="ok">✅ Não obrigatória</td><td class="no">❌ 20-30% normalmente</td></tr>
+      <tr><td>Custo Total</td><td class="ok">✅ Muito menor</td><td class="no">❌ Até 100% a mais</td></tr>
+      <tr><td>Disponibilidade Imediata</td><td class="no">❌ Não garantida (sorteio)</td><td class="ok">✅ Imediata</td></tr>
+      <tr><td>Análise de Crédito</td><td class="ok">✅ Só na contemplação</td><td class="no">❌ Exigida na adesão</td></tr>
+      <tr><td>Planejamento Financeiro</td><td class="ok">✅ Excelente</td><td>Regular</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-gold">
+    <p>🎯 <strong>Argumento fatal:</strong> <em>"No financiamento você paga um carro e GANHA um de brinde pro banco. No consórcio, você paga um carro e compra UM carro."</em> Use com números reais: veículo R$80.000 financiado em 60 meses a 1,5% a.m. = R$120.000 total. No consórcio = ~R$93.000. Economia de R$27.000.</p>
+  </div>
+
+  <h2 class="section-title">Glossário Essencial</h2>
+  <ul class="custom-list">
+    <li><strong>Carta de Crédito</strong> — Direito do contemplado de adquirir o bem (válida 120-180 dias)</li>
+    <li><strong>Cota</strong> — Número do consorciado no grupo</li>
+    <li><strong>Assembleia</strong> — Reunião mensal de sorteios e lances</li>
+    <li><strong>Contemplação</strong> — Momento em que o consorciado recebe o crédito</li>
+    <li><strong>Alienação Fiduciária</strong> — Bem fica no nome da administradora até quitação total</li>
+    <li><strong>BACEN</strong> — Banco Central, órgão regulador</li>
+    <li><strong>ABAC</strong> — Associação Brasileira de Administradoras de Consórcios</li>
+  </ul>
+
+  <h2 class="section-title">Para Quem Indicar?</h2>
+  <div class="two-col-lists">
+    <div class="col-box green-box">
+      <h4>✅ Perfil Ideal</h4>
+      <ul class="custom-list">
+        <li>Quem não tem urgência imediata em receber o bem</li>
+        <li>Quem quer planejar a compra de imóvel ou veículo</li>
+        <li>Quem quer construir patrimônio com disciplina</li>
+        <li>Quem tem FGTS e quer usar como lance (imóvel)</li>
+        <li>Investidores que querem diversificar</li>
+        <li>Empresários buscando renovar frota</li>
+        <li>Jovens planejando o primeiro imóvel</li>
+      </ul>
+    </div>
+    <div class="col-box red-box">
+      <h4>⚠️ Quando NÃO Indicar</h4>
+      <ul class="custom-list">
+        <li>Quem precisa do bem AGORA com urgência médica/emergencial</li>
+        <li>Quem não tem disciplina para pagar parcelas mensais</li>
+        <li>Quem não tem renda estável suficiente</li>
+        <li>Quem está em situação financeira crítica</li>
+      </ul>
+      <div class="highlight-green" style="margin-top:12px">
+        <p>🙏 Ética em primeiro lugar: se o perfil não é adequado, diga ao cliente. Venda com consciência. A indicação de um cliente satisfeito vale 10 vendas.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 1</h2>
+    <p>Você estudou os fundamentos do consórcio. Agora é hora de provar que dominou o conteúdo.<br>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSeZxZjz3S0o04bcdH55uiDjyIsRuq5H-Q4JI4AvQ5ExzJ_vHQ/viewform" target="_blank">Fazer Teste do Módulo 1 →</a>
+    <button class="btn-done" onclick="markDone('m1','m2')">✅ Já fiz e passei — Avançar para Módulo 2</button>
+  </div>
+  <div class="verse">"Tudo o que fizerem, façam de todo o coração, como para o Senhor." — Colossenses 3:23</div>
+</div>
+
+<!-- ── MÓDULO 2 ── -->
+<div class="page" id="page-m2">
+  <div class="module-header">
+    <div class="module-num">Fundamentos · Módulo 2</div>
+    <h1>Mentalidade & Ética Cristã em Vendas</h1>
+    <p class="module-desc">Técnica sem ética não tem espaço na OFIR. Este módulo é a fundação de tudo que vem depois.</p>
+  </div>
+
+  <div class="highlight-gold">
+    <p><em>"O homem íntegro anda em segurança, mas o de caminhos tortuosos será descoberto." — Provérbios 10:9</em></p>
+  </div>
+
+  <h2 class="section-title">Propósito Além da Comissão</h2>
+  <p class="body-text">A maioria dos vendedores pensa: <strong>"Como eu ganho mais?"</strong> O vendedor da OFIR pensa: <strong>"Como eu transformo a vida deste cliente?"</strong></p>
+  <p class="body-text">Essa diferença muda tudo — o tom da conversa, a confiança que o cliente sente, a indicação que vem depois. Quando você genuinamente quer o melhor para o cliente, ele percebe. E quando percebe, compra. E quando compra satisfeito, indica.</p>
+
+  <div class="highlight-gold">
+    <p>🔄 <strong>A equação é simples:</strong> Propósito real → Confiança genuína → Venda ética → Cliente satisfeito → Indicações → Carteira sólida → Renda crescente</p>
+  </div>
+
+  <h2 class="section-title">Integridade: O Ativo Mais Valioso</h2>
+  <p class="body-text">Você vai trabalhar com sonhos — o imóvel da família, o carro da conquista, a moto do primeiro emprego. Isso é sagrado. Tratar com descuido qualquer uma dessas situações é trair a confiança de alguém que acreditou em você.</p>
+  <p class="body-text"><strong>O que integridade significa na prática:</strong></p>
+  <ul class="custom-list">
+    <li>Nunca prometer contemplação rápida se você não pode garantir</li>
+    <li>Nunca omitir informações relevantes para fechar uma venda</li>
+    <li>Nunca vender para um perfil de cliente que não se adequa ao consórcio</li>
+    <li>Sempre explicar claramente as regras, prazos e custos</li>
+    <li>Cumprir o que prometeu — retorno, documentação, prazo de resposta</li>
+  </ul>
+
+  <h2 class="section-title">Quando NÃO Vender — A Coragem da Honestidade</h2>
+  <p class="body-text"><strong>Não venda consórcio para quem:</strong></p>
+  <ul class="custom-list">
+    <li>Precisa do bem com urgência real (doença, emergência familiar)</li>
+    <li>Está com dívidas em aberto e comprometimento de renda acima de 30%</li>
+    <li>Não entende o produto mesmo após explicação clara e completa</li>
+    <li>Está sendo pressionado por terceiros e demonstra insegurança</li>
+  </ul>
+  <div class="highlight-green">
+    <p>💡 <strong>Por que isso é estratégico, além de ético:</strong> Uma venda mal feita gera inadimplência, cancelamento, reclamação e processo. Uma venda não feita hoje por honestidade gera confiança, indicação e venda futura. O cliente que você não vendeu porque foi honesto com ele vai te indicar 3 outros.</p>
+  </div>
+
+  <h2 class="section-title">Gestão Emocional do Vendedor</h2>
+  <p class="body-text">Vendas é a profissão com maior variação emocional. Dias de euforia, dias de rejeição. Aprender a gerenciar isso é sobrevivência.</p>
+  <ul class="custom-list">
+    <li><strong>Não personalize o não.</strong> O cliente rejeitou a oferta, não você. Separe o profissional do pessoal</li>
+    <li><strong>Meta de atividade, não de resultado.</strong> Você controla quantas abordagens faz. Foque no que você controla</li>
+    <li><strong>Celebre disciplina, não só resultado.</strong> Fez 20 contatos hoje? Celebre. Independente de quantos fecharam</li>
+    <li><strong>Cuide do corpo para cuidar da mente.</strong> Sono, alimentação e exercício afetam diretamente sua performance</li>
+    <li><strong>Comunidade importa.</strong> Vendedor isolado desanima. Compartilhe dificuldades com a equipe</li>
+  </ul>
+  <div class="highlight-gold"><p><em>"Tudo posso naquele que me fortalece." — Filipenses 4:13</em></p></div>
+
+  <h2 class="section-title">Ética no Dia a Dia — Situações Reais</h2>
+  <div class="situation">
+    <div class="sit-title">Situação 1: Cliente pergunta se vai ser contemplado rápido</div>
+    <div class="sit-row"><div class="tag tag-red">❌ ERRADO</div><p>"Com certeza, temos muita gente sendo contemplada!"</p></div>
+    <div class="sit-row"><div class="tag tag-green">✅ CERTO</div><p>"Não posso garantir prazo de contemplação — isso depende do sorteio e dos lances do grupo. O que posso garantir é que você terá o crédito ao longo do plano."</p></div>
+  </div>
+  <div class="situation">
+    <div class="sit-title">Situação 2: Cliente tem restrição no nome</div>
+    <div class="sit-row"><div class="tag tag-red">❌ ERRADO</div><p>Omitir que a análise de crédito acontece na contemplação</p></div>
+    <div class="sit-row"><div class="tag tag-green">✅ CERTO</div><p>"Posso te ajudar a aderir, mas preciso te avisar: na contemplação haverá análise de crédito. Se você tiver pendências, pode ser necessário oferecer um avalista ou garantia."</p></div>
+  </div>
+  <div class="situation">
+    <div class="sit-title">Situação 3: Cliente quer cancelar</div>
+    <div class="sit-row"><div class="tag tag-red">❌ ERRADO</div><p>Dificultar, enrolar, não atender</p></div>
+    <div class="sit-row"><div class="tag tag-green">✅ CERTO</div><p>Orientar corretamente sobre as regras de cancelamento da administradora, os prazos e os valores a receber. Mesmo que o cliente saia, sai bem atendido — e pode voltar.</p></div>
+  </div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 2</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSff4Jopa5h2z-wr5MOjf3K3Io2cbMf4Q22WOCnCbN9RhwoI-g/viewform" target="_blank">Fazer Teste do Módulo 2 →</a>
+    <button class="btn-done" onclick="markDone('m2','m3')">✅ Já fiz e passei — Avançar para Módulo 3</button>
+  </div>
+  <div class="verse">"Não façais nada por partidarismo ou por vaidade, mas em humildade cada um considere o outro superior a si mesmo." — Filipenses 2:3</div>
+</div>
+
+<!-- ── MÓDULO 3 ── -->
+<div class="page" id="page-m3">
+  <div class="module-header">
+    <div class="module-num">Vendas · Módulo 3</div>
+    <h1>Técnicas de Vendas: Do Rapport ao Fechamento</h1>
+    <p class="module-desc">O vendedor que fecha consistentemente domina 4 etapas: Conexão, Diagnóstico, Apresentação e Fechamento.</p>
+  </div>
+
+  <div class="highlight-gold"><p>⚡ O cliente decide se confia em você nos primeiros <strong>30 segundos</strong>. Postura, tom de voz, olhar e energia comunicam mais do que qualquer argumento técnico.</p></div>
+
+  <h2 class="section-title">Etapa 1 — Rapport: A Arte de Criar Conexão</h2>
+  <p class="body-text">Rapport é o estado de sintonia e confiança entre duas pessoas. Sem ele, nenhuma técnica funciona.</p>
+  <ul class="custom-list">
+    <li><strong>Espelhamento:</strong> Adapte seu ritmo de fala ao do cliente. Cliente fala devagar? Desacelere.</li>
+    <li><strong>Nome:</strong> Use o nome do cliente com naturalidade — isso cria proximidade</li>
+    <li><strong>Interesse genuíno:</strong> Pergunte sobre a vida dele antes de perguntar sobre o produto</li>
+    <li><strong>Validação:</strong> Reconheça o que o cliente diz antes de responder. <em>"Faz todo sentido você pensar assim..."</em></li>
+    <li><strong>Ambiente:</strong> Se online, capriche na conexão, iluminação e fundo neutro</li>
+  </ul>
+  <div class="highlight-gold"><p>🎯 <strong>Regra de ouro do rapport:</strong> as pessoas compram de quem elas gostam e confiam. Seja essa pessoa.</p></div>
+
+  <h2 class="section-title">Etapa 2 — SPIN Selling: Diagnóstico Poderoso</h2>
+  <p class="body-text">SPIN é a metodologia de vendas consultivas mais eficaz do mundo, criada por Neil Rackham. Funciona através de 4 tipos de perguntas que levam o cliente a perceber o próprio problema e desejar a solução.</p>
+  <div class="spin-grid">
+    <div class="spin-card">
+      <div class="spin-letter">S</div><h4>Situação — Contexto atual</h4>
+      <ul><li>"Você mora de aluguel ou tem imóvel próprio?"</li><li>"Qual veículo você usa hoje?"</li><li>"Há quanto tempo pensa nessa compra?"</li></ul>
+    </div>
+    <div class="spin-card">
+      <div class="spin-letter">P</div><h4>Problema — Dificuldades</h4>
+      <ul><li>"O que te incomoda na situação atual?"</li><li>"O aluguel está pesando no orçamento?"</li><li>"Você já tentou financiar antes? Como foi?"</li></ul>
+    </div>
+    <div class="spin-card">
+      <div class="spin-letter">I</div><h4>Implicação — Consequências</h4>
+      <ul><li>"Se continuar pagando aluguel por mais 5 anos, quanto vai ter desembolsado sem ter nada em troca?"</li><li>"Sem veículo próprio, como isso afeta seu trabalho e sua família?"</li></ul>
+    </div>
+    <div class="spin-card">
+      <div class="spin-letter">N</div><h4>Necessidade — Solução</h4>
+      <ul><li>"O que seria ideal para você resolver isso?"</li><li>"Se existisse uma forma de adquirir esse bem sem pagar juros de banco, isso faria sentido para você?"</li></ul>
+    </div>
+  </div>
+  <div class="highlight-blue"><p>🎯 <strong>Regra do SPIN:</strong> Quem faz as perguntas conduz a conversa. Quem responde, segue. Seja o condutor.</p></div>
+
+  <h2 class="section-title">Etapa 3 — Apresentação da Solução</h2>
+  <p class="body-text">Só apresente o produto depois de ouvir o cliente. Jamais apresente antes de diagnosticar.</p>
+  <ul class="custom-list">
+    <li>Conecte com o que ele disse: <em>"Com base no que você me contou..."</em></li>
+    <li>Apresente o benefício, não a característica: não diga <em>"a taxa é de 18%"</em> — diga <em>"você vai pagar o bem sem nenhum juro"</em></li>
+    <li>Use números reais: compare o custo total do consórcio com o financiamento</li>
+    <li>Visualize o resultado: <em>"Em 36 meses, você pode estar com as chaves do seu imóvel na mão"</em></li>
+  </ul>
+
+  <h2 class="section-title">Etapa 4 — Fechamento</h2>
+  <div class="card-row">
+    <div class="card"><h3>Fechamento por Alternativa</h3><p>Não pergunte <em>"você vai comprar?"</em> — pergunte <em>"você prefere a cota de R$150 mil ou a de R$200 mil?"</em></p></div>
+    <div class="card"><h3>Fechamento por Sumarização</h3><p><em>"Então, você quer adquirir seu imóvel sem juros, com parcelas que cabem no seu orçamento, e tem interesse em usar o FGTS. Vou montar a proposta agora."</em></p></div>
+    <div class="card"><h3>Fechamento por Urgência Real</h3><p><em>"Esse grupo está com as últimas cotas disponíveis nessa faixa de crédito."</em></p></div>
+    <div class="card"><h3>Fechamento por Silêncio</h3><p>Após apresentar a proposta, fique em silêncio. Quem fala primeiro em negociação, perde.</p></div>
+  </div>
+
+  <h2 class="section-title">Contorno de Objeções</h2>
+  <div class="situation">
+    <div class="sit-title">💬 "Não tenho dinheiro"</div>
+    <div class="sit-row"><div class="tag tag-green">✅</div><p><em>"Entendo. Na verdade, o consórcio foi criado exatamente para quem não quer comprometer uma entrada grande. A primeira parcela é [valor]. Você consegue encaixar isso no seu orçamento?"</em></p></div>
+  </div>
+  <div class="situation">
+    <div class="sit-title">💬 "Preciso pensar"</div>
+    <div class="sit-row"><div class="tag tag-green">✅</div><p><em>"Com certeza, é uma decisão importante. Me conta — o que especificamente ainda te gera dúvida? Porque se for algo que eu possa esclarecer agora, prefiro te ajudar a decidir com segurança."</em></p></div>
+  </div>
+  <div class="situation">
+    <div class="sit-title">💬 "Prefiro financiamento"</div>
+    <div class="sit-row"><div class="tag tag-green">✅</div><p><em>"Entendo. Você já simulou quanto vai pagar no total com o financiamento? Posso te mostrar lado a lado com o consórcio — aí você decide com os números na mão."</em></p></div>
+  </div>
+  <div class="situation">
+    <div class="sit-title">💬 "Tenho medo de não ser contemplado"</div>
+    <div class="sit-row"><div class="tag tag-green">✅</div><p><em>"Essa dúvida é super legítima. Deixa eu te explicar como funciona a contemplação e quais são as suas opções para acelerar isso — incluindo o lance embutido, que não exige nenhum dinheiro extra."</em></p></div>
+  </div>
+
+  <div class="highlight-gold"><p>👂 <strong>Escuta Ativa — O Superpoder Subestimado:</strong> 80% dos vendedores falam demais. Os 20% que fecham mais são os que ouvem mais. "Seja rápido para ouvir, lento para falar." — Tiago 1:19</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 3</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSf2To3wcMP8YIymeC0u_PRXnSHyo2WAQx45c8LlHyz_yEc53w/viewform" target="_blank">Fazer Teste do Módulo 3 →</a>
+    <button class="btn-done" onclick="markDone('m3','m4')">✅ Já fiz e passei — Avançar para Módulo 4</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 4 ── -->
+<div class="page" id="page-m4">
+  <div class="module-header">
+    <div class="module-num">Vendas · Módulo 4</div>
+    <h1>Gatilhos Mentais Aplicados ao Consórcio</h1>
+    <p class="module-desc">Mecanismos psicológicos que, usados com ética e verdade, ajudam o cliente a decidir com mais clareza e confiança.</p>
+  </div>
+  <div class="highlight-gold"><p>⚡ <strong>Regra OFIR:</strong> Só use gatilho que você pode comprovar. Nada de pressão falsa, escassez inventada ou urgência fabricada.</p></div>
+
+  <div class="trigger-grid">
+    <div class="trigger-card">
+      <div class="t-header"><div class="t-num">1</div><h4>AUTORIDADE — As pessoas confiam em quem demonstra conhecimento</h4></div>
+      <ul class="custom-list">
+        <li>Domine completamente o produto antes de apresentar</li>
+        <li>Cite dados reais: <em>"O mercado de consórcios cresceu 34% em 2024"</em></li>
+        <li>Mencione regulamentação: <em>"É regulamentado pelo Banco Central, Lei 11.795/2008"</em></li>
+        <li>Use casos reais de clientes contemplados (sem expor dados privados)</li>
+      </ul>
+      <div class="highlight-blue"><p>📌 Script: <em>"Trabalho com consórcio há [tempo] e já ajudei [número] de famílias a conquistar seus sonhos sem pagar juros."</em></p></div>
+    </div>
+    <div class="trigger-card">
+      <div class="t-header"><div class="t-num">2</div><h4>PROVA SOCIAL — As pessoas fazem o que veem outras fazendo</h4></div>
+      <ul class="custom-list">
+        <li><em>"A Embracon teve 79% de crescimento em 2024 — milhares de brasileiros escolheram o consórcio"</em></li>
+        <li><em>"O Santander fechou mais de 95 mil contratos só no primeiro semestre de 2024"</em></li>
+        <li>Depoimentos reais de clientes satisfeitos (peça autorização)</li>
+      </ul>
+      <div class="highlight-blue"><p>📌 Script: <em>"Semana passada, uma cliente no perfil parecido com o seu foi contemplada com lance embutido. Ela nem precisou tirar dinheiro do bolso."</em></p></div>
+    </div>
+    <div class="trigger-card">
+      <div class="t-header"><div class="t-num">3</div><h4>URGÊNCIA — Acelera decisões que o cliente já quer tomar</h4></div>
+      <ul class="custom-list">
+        <li>Vagas limitadas: <em>"Esse grupo está com as últimas 3 cotas disponíveis"</em></li>
+        <li>Reajuste de valores: <em>"A tabela vai ser reajustada no próximo mês"</em></li>
+        <li>Perda de oportunidade: <em>"Cada mês que você adia é um mês a mais pagando aluguel"</em></li>
+      </ul>
+      <div class="highlight-red"><p>⚠️ <strong>Nunca invente urgência.</strong> Se não tem prazo real, não crie um falso. Isso destrói credibilidade.</p></div>
+    </div>
+    <div class="trigger-card">
+      <div class="t-header"><div class="t-num">4</div><h4>ESCASSEZ — Valorizamos mais o que é limitado</h4></div>
+      <ul class="custom-list">
+        <li><em>"Temos apenas 2 cotas disponíveis nesse grupo com esse prazo"</em></li>
+        <li><em>"Esse crédito de imóvel nessa faixa está com alta demanda"</em></li>
+      </ul>
+    </div>
+    <div class="trigger-card">
+      <div class="t-header"><div class="t-num">5</div><h4>RECIPROCIDADE — Quando você dá valor, a pessoa quer retribuir</h4></div>
+      <ul class="custom-list">
+        <li>Ofereça simulação completa e personalizada sem pedir nada em troca</li>
+        <li>Envie conteúdo útil antes de tentar vender</li>
+        <li>Envie parabéns no aniversário, comemore a contemplação com ele</li>
+      </ul>
+    </div>
+    <div class="trigger-card">
+      <div class="t-header"><div class="t-num">6</div><h4>COMPROMETIMENTO — Pessoas agem de acordo com o que já disseram</h4></div>
+      <ul class="custom-list">
+        <li>Faça o cliente verbalizar seus objetivos: <em>"Você me disse que quer sair do aluguel em 2 anos, certo?"</em></li>
+        <li>Micro-compromissos: <em>"Você consegue me mandar seus documentos até quinta-feira?"</em></li>
+      </ul>
+    </div>
+    <div class="trigger-card">
+      <div class="t-header"><div class="t-num">7</div><h4>AFINIDADE — Compramos de quem gostamos</h4></div>
+      <ul class="custom-list">
+        <li>Encontre pontos em comum: mesma cidade, área de trabalho, filhos na mesma faixa</li>
+        <li>Demonstre valores alinhados: ética, fé, família</li>
+        <li>Seja autêntico — pessoas percebem quando é forçado</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-title">Script Combinando Todos os Gatilhos</h2>
+  <div class="highlight-gold">
+    <p><em>"[Nome], você me contou que está pagando R$1.800 de aluguel há 3 anos — isso já são R$64.800 que saíram do seu bolso sem construir nada. <strong>(Implicação)</strong></em></p>
+    <p style="margin-top:8px"><em>Tenho um grupo de imóvel de R$200.000 com parcelas de R$980 — menos do que você paga de aluguel hoje. <strong>(Autoridade + Comparação)</strong></em></p>
+    <p style="margin-top:8px"><em>Semana passada um cliente em situação parecida com a sua foi contemplado. <strong>(Prova social)</strong></em></p>
+    <p style="margin-top:8px"><em>Mas preciso te contar que esse grupo tem apenas 2 cotas disponíveis, e a próxima assembleia é dia 15. <strong>(Escassez + Urgência)</strong></em></p>
+    <p style="margin-top:8px"><em>Você já me disse que quer sair do aluguel — o que falta para a gente fazer isso acontecer hoje?" <strong>(Comprometimento + Fechamento)</strong></em></p>
+  </div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 4</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSeX7C5dywe6oFLz0pUuJRKbxk1_Xv08xhjevde5m_1K4_qupA/viewform" target="_blank">Fazer Teste do Módulo 4 →</a>
+    <button class="btn-done" onclick="markDone('m4','m5')">✅ Já fiz e passei — Avançar para Módulo 5</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 5 ── -->
+<div class="page" id="page-m5">
+  <div class="module-header">
+    <div class="module-num">Vendas · Módulo 5</div>
+    <h1>Prospecção Ativa & Passiva</h1>
+    <p class="module-desc">A prospecção é o combustível da sua máquina de vendas — sem ela, tudo para.</p>
+  </div>
+
+  <div class="card-row">
+    <div class="card"><h3>🎯 Prospecção Ativa</h3><p>Você vai até o cliente. Carteira de contatos, indicações, WhatsApp, redes sociais e parcerias estratégicas.</p></div>
+    <div class="card"><h3>🧲 Prospecção Passiva</h3><p>O cliente vem até você. Conteúdo que atrai, Google Meu Negócio, grupos de WhatsApp e Facebook.</p></div>
+  </div>
+  <div class="highlight-gold"><p>⚡ O vendedor profissional trabalha as duas simultaneamente. Depender só de uma é vulnerabilidade.</p></div>
+
+  <h2 class="section-title">Prospecção Ativa</h2>
+
+  <h3 class="sub-title">1. Carteira de Contatos — Comece pelo Óbvio</h3>
+  <p class="body-text">Antes de buscar clientes novos, mapeie quem você já conhece. Abra sua lista de contatos e classifique: quem tem potencial de comprar nos próximos 6 meses? Quem conhece alguém que pode ter interesse?</p>
+  <div class="highlight-blue"><p>📌 <strong>Meta:</strong> Identificar 50 contatos quentes para abordar nos próximos 30 dias.<br>Script de reativação: <em>"[Nome], tudo bem? Faz tempo que não falamos. Estou trabalhando com algo que pode ser muito interessante para você — consórcio de [imóvel/veículo]. Tenho 10 minutos para te mostrar?"</em></p></div>
+
+  <h3 class="sub-title">2. Indicações — O Canal Mais Rentável</h3>
+  <p class="body-text">A indicação é a venda mais fácil que existe. O cliente indicado chega com confiança pré-construída — você pula as etapas mais difíceis da venda.</p>
+  <ul class="custom-list">
+    <li>No momento da adesão: <em>"[Nome], você conhece alguém que também esteja pensando em [imóvel/veículo]?"</em></li>
+    <li>Após a contemplação: <em>"Que conquista incrível! Quem mais na sua família merece essa mesma oportunidade?"</em></li>
+    <li>Crie um programa de indicação: um presente, um jantar, um voucher</li>
+  </ul>
+
+  <h3 class="sub-title">3. WhatsApp — Seu Escritório no Bolso</h3>
+  <p class="body-text"><strong>Perfil profissional:</strong> foto profissional, nome completo + OFIR, status com proposta de valor: <em>"Realizo sonhos através do consórcio | Sem juros | Sem entrada"</em></p>
+  <p class="body-text"><strong>Cadência de abordagem:</strong></p>
+  <ul class="custom-list">
+    <li>Dia 1: Mensagem de apresentação personalizada</li>
+    <li>Dia 3: Conteúdo de valor (dica, dado de mercado)</li>
+    <li>Dia 7: Oferta direta com proposta personalizada</li>
+    <li>Dia 14: Último contato com abertura para futuro</li>
+  </ul>
+  <div class="highlight-red"><p>🚫 <strong>Nunca envie:</strong> textos longos sem formatação, áudios sem permissão, panfletos em grupo sem contexto.</p></div>
+
+  <h3 class="sub-title">4. Redes Sociais — Construindo Autoridade Digital</h3>
+  <ul class="custom-list">
+    <li>Cases de contemplação (com autorização do cliente)</li>
+    <li>Dicas financeiras curtas (stories e reels)</li>
+    <li>Comparativos consórcio vs. financiamento com números reais</li>
+    <li>Versículos e valores OFIR</li>
+  </ul>
+  <div class="highlight-blue"><p>📌 <strong>Bio ideal Instagram:</strong> <em>"Consultor de Consórcio | Realizo sonhos sem juros | [cidade] | Fale comigo 👇"</em></p></div>
+
+  <h3 class="sub-title">5. Parcerias Estratégicas</h3>
+  <ul class="custom-list">
+    <li><strong>Corretores de imóveis:</strong> clientes que não conseguem financiamento</li>
+    <li><strong>Despachantes e concessionárias:</strong> clientes buscando veículo sem entrada</li>
+    <li><strong>Contadores:</strong> empresários que querem renovar frota com benefício fiscal</li>
+    <li><strong>Pastores e líderes de igrejas:</strong> comunidade com valores alinhados à OFIR</li>
+    <li><strong>Coaches e mentores financeiros:</strong> público já educado sobre planejamento</li>
+  </ul>
+
+  <h2 class="section-title">Funil de Prospecção OFIR</h2>
+  <div class="funnel-row"><div class="f-stage">🔝 Topo</div><div class="f-action">Novos contatos abordados</div><div class="f-meta">10 pessoas/dia</div></div>
+  <div class="funnel-row"><div class="f-stage">🔄 Meio</div><div class="f-action">Conversas ativas em andamento</div><div class="f-meta">5 follow-ups/dia</div></div>
+  <div class="funnel-row"><div class="f-stage">⬇️ Fundo</div><div class="f-action">Propostas enviadas aguardando resposta</div><div class="f-meta">2 propostas/dia</div></div>
+  <div class="funnel-row"><div class="f-stage">✅ Fechamento</div><div class="f-action">Adesões concluídas</div><div class="f-meta">1 por semana</div></div>
+
+  <h2 class="section-title">Cadência de Follow-up</h2>
+  <div class="highlight-green"><p>💡 A maioria dos vendedores desiste no 2º contato. A maioria das vendas acontece no 5º ou 6º. Enquanto o cliente não disser explicitamente "não tenho interesse", ele está em aberto.</p></div>
+  <ul class="custom-list">
+    <li><strong>D+0:</strong> Primeiro contato e proposta</li>
+    <li><strong>D+2:</strong> Follow-up leve ("Conseguiu ver a proposta?")</li>
+    <li><strong>D+5:</strong> Conteúdo de valor sem mencionar venda</li>
+    <li><strong>D+10:</strong> Nova abordagem com ângulo diferente</li>
+    <li><strong>D+20:</strong> Último contato formal ("Quero entender se ainda faz sentido conversarmos")</li>
+    <li><strong>D+60:</strong> Reativação ("Passaram alguns meses — como está o planejamento?")</li>
+  </ul>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 5</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLScv60dhOwJErgtNtdBDhfCcap0TkzzZ330FzlxQte1K8jFNvw/viewform" target="_blank">Fazer Teste do Módulo 5 →</a>
+    <button class="btn-done" onclick="markDone('m5','m6')">✅ Já fiz e passei — Avançar para Módulo 6</button>
+  </div>
+  <div class="verse">"O preguiçoso não ara no outono; no tempo da colheita ele procura e nada encontra." — Provérbios 20:4</div>
+</div>
+
+<!-- ── MÓDULO 6 ── -->
+<div class="page" id="page-m6">
+  <div class="module-header">
+    <div class="module-num">Administradoras · Módulo 6</div>
+    <h1>Santander Consórcios</h1>
+    <p class="module-desc">Um dos maiores bancos do mundo e uma das administradoras de consórcio mais sólidas do Brasil.</p>
+  </div>
+  <p class="body-text">O Santander fechou mais de <strong>95 mil contratos</strong> no primeiro semestre de 2024. Regulado pelo BACEN, oferece segurança, tecnologia e uma das maiores redes de atendimento do país.</p>
+
+  <h2 class="section-title">Portfólio de Produtos</h2>
+  <table class="data-table">
+    <thead><tr><th>Produto</th><th>Crédito disponível</th><th>Prazo</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Imóvel</strong></td><td>Até R$ 1.100.000</td><td>Até 200 meses</td></tr>
+      <tr><td><strong>Automóvel</strong></td><td>Até R$ 120.000</td><td>Até 80 meses</td></tr>
+      <tr><td><strong>Motocicleta</strong></td><td>Até R$ 30.000</td><td>Até 70 meses</td></tr>
+      <tr><td><strong>Veículos Pesados</strong></td><td>Até R$ 350.000</td><td>Até 100 meses</td></tr>
+      <tr><td><strong>Serviços</strong></td><td>Até R$ 30.000</td><td>Até 50 meses</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">Diferenciais Santander</h2>
+  <ul class="custom-list">
+    <li><strong>Chama Santander:</strong> Programa de indicação onde clientes ganham benefícios ao indicar</li>
+    <li>Portal do Consorciado digital completo — acompanhe tudo pelo app</li>
+    <li>Aceita FGTS como lance em consórcio de imóvel</li>
+    <li>Lance embutido disponível em todos os planos</li>
+    <li>Análise de crédito simplificada na contemplação</li>
+  </ul>
+
+  <h2 class="section-title">Como Vender Santander</h2>
+  <ul class="custom-list">
+    <li>Destaque a solidez e segurança de uma instituição bancária global</li>
+    <li>Para imóvel de alto valor (acima de R$500mil): Santander é uma das poucas opções do mercado</li>
+    <li>Para clientes que já são correntistas Santander: facilidade de relacionamento</li>
+    <li>Use o argumento: <em>"É o mesmo Banco Central que regula a conta corrente de vocês"</em></li>
+  </ul>
+
+  <div class="highlight-gold"><p>🎯 <strong>Perfil de Cliente Ideal:</strong> Clientes que valorizam segurança e nome de marca · Imóveis de médio e alto padrão · Empresários com frota de pesados · Clientes já relacionados com o Santander</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 6</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSeySBEXdye2Z6h3XBU3n86YV27bdyKnMPnnW6dCNFNBcDvlQQ/viewform" target="_blank">Fazer Teste do Módulo 6 →</a>
+    <button class="btn-done" onclick="markDone('m6','m7')">✅ Já fiz e passei — Avançar para Módulo 7</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 7 ── -->
+<div class="page" id="page-m7">
+  <div class="module-header">
+    <div class="module-num">Administradoras · Módulo 7</div>
+    <h1>Canopus Consórcios</h1>
+    <p class="module-desc">Administradora especializada com foco em atendimento personalizado e agilidade operacional.</p>
+  </div>
+  <p class="body-text">Diferente dos grandes bancos, a Canopus oferece uma relação mais próxima e flexível com o consorciado.</p>
+
+  <h2 class="section-title">Portfólio de Produtos</h2>
+  <div class="product-grid">
+    <div class="product-card"><h5>🏠 Imóvel</h5><p>Residencial, comercial e terreno</p></div>
+    <div class="product-card"><h5>🚗 Automóvel</h5><p>Veículos novos e usados</p></div>
+    <div class="product-card"><h5>🏍️ Motocicleta</h5><p>Todas as cilindradas</p></div>
+    <div class="product-card"><h5>🔧 Serviços</h5><p>Reforma, viagens, educação</p></div>
+  </div>
+
+  <h2 class="section-title">Diferenciais Canopus</h2>
+  <ul class="custom-list">
+    <li>Atendimento mais próximo e personalizado</li>
+    <li>Flexibilidade em grupos e prazos</li>
+    <li>Processo de contemplação ágil</li>
+    <li>Suporte direto ao corretor — acesso facilitado à equipe de suporte</li>
+    <li>Boa relação custo-benefício nas taxas de administração</li>
+  </ul>
+
+  <h2 class="section-title">Como Vender Canopus</h2>
+  <ul class="custom-list">
+    <li>Destaque o atendimento humanizado vs. grandes bancos</li>
+    <li>Para clientes que tiveram experiências burocráticas com bancos, a Canopus é uma alternativa mais ágil</li>
+    <li>Use os materiais de apoio disponíveis: manuais de contemplados para imóvel, veículo e moto</li>
+  </ul>
+  <div class="highlight-gold"><p>📋 <strong>Materiais de Apoio Disponíveis:</strong> Manual do Contemplado (Imóvel · Veículo · Motocicleta) · Guia Interativo — Contemplados Automóveis</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 7</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSdmBXC4zK_-cFizf9efKZG0Czq8QviGadOW9PokM6tQjpcX6A/viewform" target="_blank">Fazer Teste do Módulo 7 →</a>
+    <button class="btn-done" onclick="markDone('m7','m8')">✅ Já fiz e passei — Avançar para Módulo 8</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 8 ── -->
+<div class="page" id="page-m8">
+  <div class="module-header">
+    <div class="module-num">Administradoras · Módulo 8</div>
+    <h1>HS Consórcios</h1>
+    <p class="module-desc">Administradora com foco em crescimento acelerado e portfólio diversificado.</p>
+  </div>
+  <p class="body-text">A HS apresenta boas condições competitivas especialmente para veículos e imóveis de médio padrão, com taxas de administração que geram parcelas menores.</p>
+
+  <h2 class="section-title">Portfólio e Diferenciais</h2>
+  <ul class="custom-list">
+    <li>Consórcio de imóvel, automóvel, moto e serviços</li>
+    <li>Taxas de administração competitivas</li>
+    <li>Grupos com boa liquidez de contemplação</li>
+    <li>Suporte comercial ativo para corretores parceiros</li>
+    <li>Processo de adesão simplificado</li>
+  </ul>
+
+  <h2 class="section-title">Como Vender HS</h2>
+  <ul class="custom-list">
+    <li>Posicione como opção com excelente custo-benefício</li>
+    <li>Ideal para clientes sensíveis ao valor da parcela — as taxas competitivas geram parcelas menores</li>
+    <li>Explore os grupos com maior frequência de contemplação</li>
+    <li>Para clientes que pesquisam muito preço: a HS frequentemente se destaca na comparação de taxas</li>
+  </ul>
+
+  <div class="highlight-gold"><p>🎯 <strong>Perfil de Cliente Ideal:</strong> Clientes que pesquisam muito antes de decidir · Sensíveis ao custo total · Buscando imóvel ou veículo de médio padrão · Primeira experiência com consórcio</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 8</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSem_27riVaBx0cURF32nMEj2oi6GCrRD0rp7VhHqqSjh_ut0Q/viewform" target="_blank">Fazer Teste do Módulo 8 →</a>
+    <button class="btn-done" onclick="markDone('m8','m9')">✅ Já fiz e passei — Avançar para Módulo 9</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 9 ── -->
+<div class="page" id="page-m9">
+  <div class="module-header">
+    <div class="module-num">Administradoras · Módulo 9</div>
+    <h1>Yamaha Consórcio</h1>
+    <p class="module-desc">Uma das maiores fabricantes de motocicletas do mundo opera sua própria administradora focada em motos Yamaha.</p>
+  </div>
+  <p class="body-text">É a escolha natural para quem quer uma moto Yamaha — sem objeção de produto, com integração direta à rede de concessionárias.</p>
+
+  <h2 class="section-title">Portfólio</h2>
+  <ul class="custom-list">
+    <li>Motos Yamaha (YBR, Factor, Fazer, MT, R3, Ténéré, entre outras)</li>
+    <li>Equipamentos e acessórios Yamaha</li>
+    <li>Crédito direcionado para aquisição de produtos da marca</li>
+  </ul>
+
+  <h2 class="section-title">Diferenciais Yamaha Consórcio</h2>
+  <ul class="custom-list">
+    <li>Especialização total em motos — equipe que conhece profundamente o produto</li>
+    <li>Integração com a rede de concessionárias Yamaha</li>
+    <li>Carta de crédito direcionada — facilita a aquisição diretamente na concessionária</li>
+    <li>Taxas específicas para a marca com condições diferenciadas</li>
+  </ul>
+
+  <h2 class="section-title">Como Vender Yamaha Consórcio</h2>
+  <ul class="custom-list">
+    <li>Ideal para clientes que já sabem que querem uma moto Yamaha — não há objeção de produto</li>
+    <li>Destaque a integração: <em>"Você já conhece a moto que quer, agora é só garantir sua cota"</em></li>
+    <li>Para motociclistas que já têm uma moto e querem trocar: lance com o valor do bem atual</li>
+    <li>Público jovem: conecte com a identidade e estilo de vida da marca Yamaha</li>
+    <li>Modelos populares: Factor e YBR para uso diário, Fazer e MT para performance</li>
+  </ul>
+
+  <div class="highlight-gold"><p>🎯 <strong>Perfil de Cliente Ideal:</strong> Entusiastas da marca Yamaha · Jovens com primeira moto · Mototaxistas e delivery · Clientes que possuem moto e querem upgrade</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 9</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSe-4JbJKChCssMVbHQBbTauDJmX_X19f3xHJ2mRYXe2gUas2A/viewform" target="_blank">Fazer Teste do Módulo 9 →</a>
+    <button class="btn-done" onclick="markDone('m9','m10')">✅ Já fiz e passei — Avançar para Módulo 10</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 10 ── -->
+<div class="page" id="page-m10">
+  <div class="module-header">
+    <div class="module-num">Administradoras · Módulo 10</div>
+    <h1>Roma Consórcio</h1>
+    <p class="module-desc">Administradora com presença consolidada no mercado brasileiro, reconhecida pela solidez operacional.</p>
+  </div>
+  <p class="body-text">A Roma possui bom histórico de contemplações, focada em imóvel e veículos, com taxas de administração equilibradas.</p>
+
+  <h2 class="section-title">Portfólio e Diferenciais</h2>
+  <ul class="custom-list">
+    <li>Consórcio de imóvel, automóvel, motocicleta e serviços</li>
+    <li>Histórico sólido de contemplações por sorteio e lance</li>
+    <li>Taxas de administração equilibradas</li>
+    <li>Bom suporte pós-venda para o consorciado</li>
+    <li>Processo de análise de crédito na contemplação estruturado e claro</li>
+  </ul>
+
+  <h2 class="section-title">Como Vender Roma</h2>
+  <ul class="custom-list">
+    <li>Posicione com base no histórico: <em>"A Roma tem um histórico consistente de contemplações — grupos bem gerenciados"</em></li>
+    <li>Para clientes que pesquisam reputação da administradora: destaque tempo de mercado e solidez</li>
+    <li>Ideal para clientes que valorizam estabilidade e previsibilidade</li>
+    <li>Compare taxas com financiamento para mostrar a vantagem no custo total</li>
+  </ul>
+
+  <div class="highlight-gold"><p>🎯 <strong>Perfil de Cliente Ideal:</strong> Clientes conservadores que valorizam segurança · Perfil que pesquisa histórico da empresa · Imóvel residencial de médio padrão · Veículos de passeio</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 10</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSdlTQu_ViTUGXX0ijhSsdP4_JNhYgugDodSoK2uBK7Z8cWKOQ/viewform" target="_blank">Fazer Teste do Módulo 10 →</a>
+    <button class="btn-done" onclick="markDone('m10','m11')">✅ Já fiz e passei — Avançar para Módulo 11</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 11 ── -->
+<div class="page" id="page-m11">
+  <div class="module-header">
+    <div class="module-num">Administradoras · Módulo 11</div>
+    <h1>Embracon</h1>
+    <p class="module-desc">A maior administradora independente de consórcio do Brasil — 35+ anos de mercado, crescimento de 79% em 2024.</p>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">79%</div><div class="stat-label">Crescimento em 2024</div></div>
+    <div class="stat-card"><div class="stat-num">35+</div><div class="stat-label">Anos de mercado</div></div>
+    <div class="stat-card"><div class="stat-num">700k+</div><div class="stat-label">Consorciados ativos</div></div>
+    <div class="stat-card"><div class="stat-num">R$30bi</div><div class="stat-label">Em créditos administrados</div></div>
+  </div>
+
+  <h2 class="section-title">Portfólio Completo</h2>
+  <table class="data-table">
+    <thead><tr><th>Produto</th><th>Crédito</th><th>Prazo</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Imóvel</strong></td><td>Até R$ 1.500.000</td><td>Até 240 meses</td></tr>
+      <tr><td><strong>Automóvel</strong></td><td>Até R$ 120.000</td><td>Até 100 meses</td></tr>
+      <tr><td><strong>Motocicleta</strong></td><td>Até R$ 40.000</td><td>Até 80 meses</td></tr>
+      <tr><td><strong>Serviços</strong></td><td>Até R$ 30.000</td><td>Até 50 meses</td></tr>
+      <tr><td><strong>Veículos Pesados</strong></td><td>Até R$ 600.000</td><td>Até 120 meses</td></tr>
+      <tr><td><strong>Máquinas Agrícolas</strong></td><td>Até R$ 600.000</td><td>Até 120 meses</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">Diferenciais Embracon</h2>
+  <ul class="custom-list">
+    <li><strong>Maior independente do Brasil</strong> — não é banco, é especialista em consórcio</li>
+    <li>35+ anos de mercado com histórico impecável</li>
+    <li>Maior variedade de créditos de imóvel do mercado (até R$1,5M)</li>
+    <li>Plataforma digital robusta — portal e app completos</li>
+    <li>Aceita FGTS como lance em imóvel</li>
+    <li>Lance embutido em todos os planos</li>
+    <li>Crescimento de 79% em 2024 — prova de confiança do mercado</li>
+  </ul>
+
+  <h2 class="section-title">Como Vender Embracon</h2>
+  <ul class="custom-list">
+    <li>Use o crescimento de 79% como prova social: <em>"Em 2024 a Embracon cresceu 79% — o mercado reconhece a qualidade"</em></li>
+    <li>Para créditos altos de imóvel (acima de R$500mil): a Embracon tem o maior crédito disponível</li>
+    <li>Destaque a independência: <em>"Por não ser banco, a Embracon é 100% especializada em consórcio"</em></li>
+    <li>Para pesados e agrícolas: a Embracon é referência nacional</li>
+  </ul>
+
+  <div class="highlight-gold"><p>🎯 <strong>Perfil de Cliente Ideal:</strong> Imóveis de alto padrão · Empresários com frota · Produtores rurais (máquinas agrícolas) · Clientes que valorizam empresa especialista · Qualquer perfil que busque a maior variedade de opções</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 11</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSeiEV18n5PGwsVVlTdc5yunb1gzuwmuIKSaVCqwF8aUf9vS6g/viewform" target="_blank">Fazer Teste do Módulo 11 →</a>
+    <button class="btn-done" onclick="markDone('m11','m12')">✅ Já fiz e passei — Avançar para Módulo 12</button>
+  </div>
+</div>
+
+<!-- ── MÓDULO 12 ── -->
+<div class="page" id="page-m12">
+  <div class="module-header">
+    <div class="module-num">Excelência · Módulo 12</div>
+    <h1>Pós-Contemplação & Fidelização</h1>
+    <p class="module-desc">A venda não termina na assinatura. O pós-venda é onde se constrói a carteira e onde moram as indicações.</p>
+  </div>
+  <div class="highlight-gold"><p>⚡ Um cliente bem acompanhado vale <strong>10 vendas futuras</strong>. O maior erro dos vendedores é sumir depois de fechar.</p></div>
+
+  <h2 class="section-title">O Que Fazer Após a Contemplação</h2>
+  <h3 class="sub-title">Imediatamente após a contemplação:</h3>
+  <ul class="custom-list">
+    <li>Ligue para parabenizar pessoalmente — seja o primeiro a celebrar com ele</li>
+    <li>Explique o passo a passo: documentação necessária, prazo para usar o crédito</li>
+    <li>Oriente sobre a escolha do bem: o crédito pode ser usado para qualquer bem do tipo contratado</li>
+    <li>Alerte sobre os prazos: a carta de crédito tem validade (geralmente 120 a 180 dias)</li>
+  </ul>
+
+  <h3 class="sub-title">Documentação geralmente necessária na contemplação:</h3>
+  <ul class="custom-list">
+    <li>RG e CPF do titular e cônjuge</li>
+    <li>Comprovante de renda (holerites, declaração de IR, extratos)</li>
+    <li>Comprovante de residência atualizado</li>
+    <li>Certidão de nascimento ou casamento</li>
+    <li>Documentação do bem a ser adquirido (quando aplicável)</li>
+  </ul>
+
+  <h2 class="section-title">Construindo Relacionamento de Longo Prazo</h2>
+  <ul class="custom-list">
+    <li><strong>Aniversário do cliente:</strong> mensagem pessoal, não automatizada</li>
+    <li><strong>Aniversário da contemplação:</strong> <em>"Faz 1 ano que você conquistou seu imóvel! Como está sendo?"</em></li>
+    <li><strong>Conteúdo relevante:</strong> envie dicas de mercado sem tentar vender</li>
+    <li><strong>Ligação trimestral:</strong> <em>"Só passei para saber como você está e se tem algo em que eu possa ajudar"</em></li>
+  </ul>
+
+  <h2 class="section-title">Como Pedir Indicação no Momento Certo</h2>
+  <p class="body-text">O melhor momento para pedir indicação é <strong>logo após a contemplação</strong> — quando o cliente está no pico da satisfação.</p>
+  <div class="highlight-blue">
+    <p>📌 <strong>Script pós-contemplação:</strong> <em>"[Nome], fico muito feliz por você ter conquistado esse sonho! Agora me ajuda — você conhece alguém, familiar ou amigo, que também esteja pensando em [imóvel/veículo]? Uma palavra sua vai fazer toda a diferença."</em></p>
+  </div>
+  <div class="highlight-gold"><p>💡 <strong>Seja específico:</strong> <em>"Você tem um colega de trabalho que mencionou que quer comprar um carro?"</em> é melhor que <em>"conhece alguém que quer comprar alguma coisa?"</em></p></div>
+
+  <h2 class="section-title">Construindo sua Carteira</h2>
+  <p class="body-text">Uma carteira sólida é o maior patrimônio de um corretor. Com 200 clientes bem relacionados:</p>
+  <ul class="custom-list">
+    <li>20% compram novamente em 3 anos</li>
+    <li>40% indicam pelo menos 1 pessoa por ano</li>
+    <li>Você gera renda recorrente sem depender só de novos clientes</li>
+  </ul>
+  <div class="highlight-green"><p>📋 <strong>Meta:</strong> Registre todos os clientes, datas de contemplação, produtos adquiridos e próximas oportunidades. Use uma planilha ou CRM simples.</p></div>
+
+  <div class="test-section">
+    <h2>📝 Teste do Módulo 12</h2>
+    <p>Mínimo de <strong>70% de acertos</strong> para avançar ao próximo módulo.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSeLLP0O0zlbjD3IT8s1SOHN5hMLPk9ZZ3H7J5Pep1_i5sqHYg/viewform" target="_blank">Fazer Teste do Módulo 12 →</a>
+    <button class="btn-done" onclick="markDone('m12','m13')">✅ Já fiz e passei — Avançar para o Desafio Final</button>
+  </div>
+  <div class="verse">"O que você semeia, isso colherá." — Gálatas 6:7</div>
+</div>
+
+<!-- ── MÓDULO 13 - DESAFIO FINAL ── -->
+<div class="page" id="page-m13">
+  <div class="module-header">
+    <div class="module-num">Excelência · Desafio Final</div>
+    <h1>🏆 Desafio Final (TCC)</h1>
+    <p class="module-desc">Este é o teste definitivo. Aqui você não responde perguntas de múltipla escolha — você executa. Mínimo: <strong>80% para aprovação</strong>.</p>
+  </div>
+
+  <div class="highlight-gold"><p>⚡ Aqui se separa os bons dos ótimos. Se não atingir 80%, você revisa os módulos indicados e refaz com acompanhamento de Jonathan.</p></div>
+
+  <h2 class="section-title">O Que Será Avaliado</h2>
+  <div class="final-criteria">
+    <div class="crit-card"><h4>1. Conhecimento Técnico do Produto</h4><p>Você sabe explicar consórcio com clareza, sem travar, sem errar dados?</p></div>
+    <div class="crit-card"><h4>2. Conhecimento das Administradoras</h4><p>Você sabe qual produto oferecer para cada perfil? Conhece as diferenças entre Santander, Canopus, HS, Yamaha, Roma e Embracon?</p></div>
+    <div class="crit-card"><h4>3. Técnicas de Venda</h4><p>Você usa SPIN? Cria rapport? Contorna objeções com elegância? Fecha com naturalidade?</p></div>
+    <div class="crit-card"><h4>4. Ética e Valores OFIR</h4><p>Você age com integridade? Sabe quando não vender? Coloca o cliente acima da comissão?</p></div>
+  </div>
+  <div class="card-full">
+    <h3>5. Simulação de Venda Completa (Roleplay)</h3>
+    <p class="body-text">Você receberá um perfil de cliente fictício e deverá conduzir uma venda completa — do primeiro contato ao fechamento. Jonathan faz o papel de cliente.</p>
+  </div>
+
+  <h2 class="section-title">Roteiro do Desafio Final</h2>
+  <div class="highlight-blue">
+    <p><strong>Parte 1 — Questões Técnicas:</strong> Múltipla escolha — 20 questões abrangendo todos os módulos</p>
+    <p style="margin-top:10px"><strong>Parte 2 — Estudo de Caso:</strong> Você receberá o perfil de um cliente com situação financeira, necessidade e objeções específicas. Deverá identificar o produto ideal, montar a proposta com valores reais, listar as objeções prováveis e escrever o script de fechamento.</p>
+    <p style="margin-top:10px"><strong>Parte 3 — Roleplay com Jonathan:</strong> Uma conversa simulada de venda onde Jonathan faz o papel de cliente.</p>
+  </div>
+
+  <h2 class="section-title">Como se Preparar</h2>
+  <ul class="custom-list">
+    <li>Revise os módulos onde teve dificuldade nos testes</li>
+    <li>Pratique simulações de venda com colegas antes do roleplay com Jonathan</li>
+    <li>Tenha os dados das 6 administradoras na ponta da língua</li>
+    <li>Relembre os scripts de contorno de objeções do Módulo 3</li>
+    <li>Durma bem na véspera — clareza mental é fundamental</li>
+  </ul>
+
+  <h2 class="section-title">Critérios de Aprovação</h2>
+  <div class="approval-row">
+    <div class="appr-card pass"><h4>✅ 80% ou mais — APROVADO</h4><p>Parabéns — você é um Consultor OFIR certificado. Está pronto para atender clientes com autonomia e excelência.</p></div>
+    <div class="appr-card fail"><h4>⚠️ Abaixo de 80% — REVISÃO</h4><p>Você revisa os módulos indicados na correção e agenda um novo Desafio Final com Jonathan. O objetivo é que você saia realmente preparado.</p></div>
+  </div>
+
+  <div class="test-section">
+    <h2>🏆 Acessar o Desafio Final</h2>
+    <p>Mínimo de <strong>80% de acertos</strong> para aprovação e certificação como Consultor OFIR.</p>
+    <a class="btn-test" href="https://docs.google.com/forms/d/e/1FAIpQLSeTEiB2jiA1JXh5iUhGojkGjXhSp1cS_J8nNBAb4u3HDpCO1Q/viewform" target="_blank">Acessar o Desafio Final →</a>
+    <button class="btn-done" onclick="markDone('m13',null)">✅ Concluí o Desafio Final — Ver Certificado</button>
+  </div>
+  <div class="verse">"Persevere na leitura pública das Escrituras, na exortação e no ensino. Não negligencie o dom que há em você." — 1 Timóteo 4:13</div>
+</div>
+
+<!-- ── CONGRATS ── -->
+<div class="page" id="page-congrats">
+  <div class="trophy">🏆</div>
+  <h1>Parabéns, Consultor OFIR!</h1>
+  <p>Poucos têm a disciplina de completar uma formação completa. Isso já diz muito sobre quem você é e onde você vai chegar.</p>
+  <p>Agora é hora de colocar em prática. O mercado está esperando por você.</p>
+  <div class="quote-bar">"Seja forte e corajoso! Não se apavore nem desanime, pois o Senhor, o seu Deus, estará com você por onde você andar." — Josué 1:9</div>
+  <p style="margin-top:20px; color: var(--text-light); font-size:13px;">— Jonathan Schmitt | OFIR Soluções Financeiras</p>
+  <button class="btn-primary" style="margin-top:24px" onclick="go(document.querySelector('[data-page=welcome]'))">← Voltar ao Início</button>
+</div>
+
+</main>
+
+<script>
+// ── STATE ──
+const TOTAL = 13;
+let done = JSON.parse(localStorage.getItem('ofir_done') || '[]');
+
+function save() { localStorage.setItem('ofir_done', JSON.stringify(done)); }
+
+function updateProgress() {
+  const pct = Math.round((done.length / TOTAL) * 100);
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('pfill').style.width = pct + '%';
+  // update nav dots
+  document.querySelectorAll('.nav-item[data-page]').forEach(el => {
+    const pg = el.getAttribute('data-page');
+    el.classList.remove('done');
+    if (done.includes(pg)) el.classList.add('done');
+  });
+}
+
+function go(el) {
+  if (!el) return;
+  const pg = el.getAttribute('data-page');
+  // hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + pg).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+  document.getElementById('main').scrollTop = 0;
+}
+
+function markDone(current, next) {
+  if (!done.includes(current)) { done.push(current); save(); }
+  updateProgress();
+  if (next) {
+    const el = document.querySelector('[data-page=' + next + ']');
+    go(el);
+  } else {
+    // all done — show congrats
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-congrats').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+}
+
+// init
+updateProgress();
+</script>
+</body>
+</html>
